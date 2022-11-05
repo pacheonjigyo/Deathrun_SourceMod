@@ -1,0 +1,109 @@
+﻿
+
+/*
+	INCLUDE
+			*/
+
+#include <sourcemod>
+#include <sdktools>
+
+
+/*
+	DEFINE
+			*/
+
+#define VIRTUAL_RESPAWN 21
+#define SOUND_AMOUNT 36
+
+
+/*
+	BOOL
+			*/
+
+new bool:RoundEnd = false;
+new bool:SystemStart = false;
+new bool:WaitingTime = false;
+new bool:KnifeTime = false;
+new bool:PrintType = false;
+new bool:maproadfinish = false;
+
+
+/*
+	HANDLE
+			*/
+
+new Handle:RespawnHandle = INVALID_HANDLE;
+new Handle:BugFix = INVALID_HANDLE;
+
+
+/*
+	INT
+			*/
+
+new Victory;
+new ReadyT;
+new KnifeQuestion;
+new g_BeamSprite;
+new footstepsprite;
+new NoblockOffset;
+new Protect[MAXPLAYERS+1];
+
+
+/*
+	FLOAT
+			*/
+
+new Float:SaveSpawn[3];
+
+
+/*
+	STRING
+			*/
+
+new String:ClassName[32][255];
+new String:gamedescription[64] = "☀ Deathrun";
+new const String:ZAP1[] = "ambient/energy/zap1.wav";
+new const String:ZAP2[] = "ambient/energy/zap2.wav";
+new const String:ZAP3[] = "ambient/energy/zap3.wav";
+new const String:ZAP4[] = "ambient/energy/zap7.wav";
+new const String:ZAP5[] = "ambient/energy/zap8.wav";
+new const String:ZAP6[] = "sprites/redglow1.vmt";
+new String:GetPrecacheSound[SOUND_AMOUNT][128] =
+{
+	"lmnop/newdeathrun/countdown/1.mp3",
+	"lmnop/newdeathrun/countdown/2.mp3",
+	"lmnop/newdeathrun/countdown/3.mp3",
+	"lmnop/newdeathrun/countdown/4.mp3",
+	"lmnop/newdeathrun/countdown/5.mp3",
+	"lmnop/newdeathrun/countdown/6.mp3",
+	"lmnop/newdeathrun/countdown/7.mp3",
+	"lmnop/newdeathrun/countdown/8.mp3",
+	"lmnop/newdeathrun/countdown/9.mp3",
+	"lmnop/newdeathrun/countdown/10.mp3",
+	"lmnop/newdeathrun/countdown/protectoff.mp3",
+	"lmnop/newdeathrun/deathsound/C1.mp3",
+	"lmnop/newdeathrun/deathsound/C2.mp3",
+	"lmnop/newdeathrun/deathsound/C3.mp3",
+	"lmnop/newdeathrun/deathsound/C4.mp3",
+	"lmnop/newdeathrun/deathsound/C5.mp3",
+	"lmnop/newdeathrun/deathsound/C6.mp3",
+	"lmnop/newdeathrun/deathsound/T1.mp3",
+	"lmnop/newdeathrun/deathsound/T2.mp3",
+	"lmnop/newdeathrun/deathsound/T3.mp3",
+	"lmnop/newdeathrun/deathsound/T4.mp3",
+	"lmnop/newdeathrun/deathsound/T5.mp3",
+	"lmnop/newdeathrun/deathsound/T6.mp3",
+	"lmnop/newdeathrun/adminchat.mp3",
+	"lmnop/newdeathrun/connectall.mp3",
+	"lmnop/newdeathrun/connectclient.mp3",
+	"lmnop/newdeathrun/disconnectall.mp3",
+	"lmnop/newdeathrun/publicchat.mp3",
+	"lmnop/newdeathrun/roundstart.mp3",
+	"lmnop/newdeathrun/trapperselect.mp3",
+	"lmnop/newdeathrun/trapperwin2.mp3",
+	"lmnop/newdeathrun/runnerwin2.mp3",
+	"lmnop/newdeathrun/knifefight/ready.mp3",
+	"lmnop/newdeathrun/knifefight/no.mp3",
+	"ambient/explosions/explode_7.wav",
+	"buttons/blip1.wav"
+}
